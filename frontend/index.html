@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Filigrane — PDF Watermarker</title>
+  <script type="module" src="/src/main.ts"></script>
+</head>
+<body class="bg-light min-vh-100 py-5">
+
+  <div class="container" style="max-width: 900px">
+
+    <div class="text-center mb-5">
+      <h1 class="fw-bold">Filigrane</h1>
+      <p class="text-secondary">Upload a PDF, add a watermark, get a time-limited download link.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Left column: upload + form + button -->
+      <div class="col-md-7">
+        <div class="card shadow-sm">
+          <div class="card-body p-4 d-flex flex-column gap-4">
+
+            <div>
+              <h6 class="text-uppercase text-secondary small fw-semibold mb-2">1 — Upload your PDF</h6>
+              <div id="upload-zone"></div>
+            </div>
+
+            <div>
+              <h6 class="text-uppercase text-secondary small fw-semibold mb-2">2 — Configure watermark</h6>
+              <div id="watermark-form"></div>
+            </div>
+
+            <button id="submit-btn" type="button" class="btn btn-primary w-100 fw-semibold">
+              <i class="bi bi-shield-check me-2"></i>Apply watermark
+            </button>
+
+            <div id="download-panel"></div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: preview -->
+      <div class="col-md-5">
+        <div class="card shadow-sm h-100">
+          <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+            <h6 class="text-uppercase text-secondary small fw-semibold mb-3 align-self-start">Preview</h6>
+            <div id="preview-panel"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

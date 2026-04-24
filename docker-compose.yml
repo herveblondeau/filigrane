@@ -1,0 +1,37 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    image: filigrane-frontend
+    container_name: filigrane-frontend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./api
+    image: filigrane-api
+    container_name: filigrane-api
+    expose:
+      - "8080"
+    volumes:
+      - filigrane-files:/app/storage
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      Filigrane__StoragePath: /app/storage
+      Filigrane__TokenExpiryHours: ${TOKEN_EXPIRY_HOURS:-4}
+      Filigrane__CleanupIntervalMinutes: ${CLEANUP_INTERVAL_MINUTES:-30}
+      Filigrane__MaxFileSizeBytes: ${MAX_FILE_SIZE_BYTES:-3145728}
+      RateLimiting__WatermarkPermitLimit: ${WATERMARK_PERMIT_LIMIT:-5}
+      RateLimiting__WatermarkWindowSeconds: ${WATERMARK_WINDOW_SECONDS:-60}
+      RateLimiting__DownloadPermitLimit: ${DOWNLOAD_PERMIT_LIMIT:-20}
+      RateLimiting__DownloadWindowSeconds: ${DOWNLOAD_WINDOW_SECONDS:-60}
+    restart: unless-stopped
+
+volumes:
+  filigrane-files:
+    driver: local
