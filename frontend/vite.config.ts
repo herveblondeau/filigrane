@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
+import { createApiProxyConfig } from './vite/apiProxy';
 
 export default defineConfig({
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:5177',
-        changeOrigin: true,
-      },
+      '/api': createApiProxyConfig(process.env),
     },
   },
 });
