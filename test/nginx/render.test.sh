@@ -47,8 +47,10 @@ refute() { # <description> <pattern>
 check "upstream points at WORKFLOW_API_URL"      3 "proxy_pass         http://host.docker.internal:8080;"
 # X-Api-Key injected on all three /api locations
 check "X-Api-Key injected"                       3 'proxy_set_header   X-Api-Key         "test-key-123";'
+# SNI + upstream Host so an HTTPS domain upstream (not just local HTTP) works
+check "proxy_ssl_server_name enabled"            3 "proxy_ssl_server_name on;"
+check "upstream Host used (\$proxy_host)"         3 "Host              \$proxy_host;"
 # nginx's own runtime variables preserved (must NOT be substituted)
-check "\$host preserved"                          3 "Host              \$host;"
 check "\$proxy_add_x_forwarded_for preserved"     3 "\$proxy_add_x_forwarded_for;"
 check "\$binary_remote_addr preserved"            3 "limit_req_zone \$binary_remote_addr"
 # No unresolved placeholders leak into the served config
