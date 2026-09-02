@@ -33,10 +33,15 @@ http {
             limit_req zone=watermark_zone burst=2 nodelay;
             limit_req_status 429;
 
-            proxy_pass         http://api:8080;
-            proxy_set_header   Host              $host;
+            proxy_pass         ${WORKFLOW_API_URL};
+            # Works for both a plain-HTTP same-network upstream and an HTTPS
+            # domain upstream: send SNI + the upstream's own Host, not the
+            # browser's, so TLS/vhost matching on the remote proxy succeeds.
+            proxy_ssl_server_name on;
+            proxy_set_header   Host              $proxy_host;
             proxy_set_header   X-Real-IP         $remote_addr;
             proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Api-Key         "${WORKFLOW_API_KEY}";
             proxy_read_timeout 120s;
             proxy_send_timeout 30s;
         }
@@ -46,10 +51,12 @@ http {
             limit_req zone=download_zone burst=5 nodelay;
             limit_req_status 429;
 
-            proxy_pass         http://api:8080;
-            proxy_set_header   Host              $host;
+            proxy_pass         ${WORKFLOW_API_URL};
+            proxy_ssl_server_name on;
+            proxy_set_header   Host              $proxy_host;
             proxy_set_header   X-Real-IP         $remote_addr;
             proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Api-Key         "${WORKFLOW_API_KEY}";
             proxy_buffering    off;
             proxy_read_timeout 60s;
         }
@@ -59,10 +66,12 @@ http {
             limit_req zone=api_zone burst=10 nodelay;
             limit_req_status 429;
 
-            proxy_pass         http://api:8080;
-            proxy_set_header   Host              $host;
+            proxy_pass         ${WORKFLOW_API_URL};
+            proxy_ssl_server_name on;
+            proxy_set_header   Host              $proxy_host;
             proxy_set_header   X-Real-IP         $remote_addr;
             proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Api-Key         "${WORKFLOW_API_KEY}";
         }
     }
 }

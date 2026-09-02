@@ -5,6 +5,8 @@
 
 # dotenv files
 .env*
+# ...but keep the tracked example so onboarding env vars live in git
+!.env.example
 
 # User-specific files
 *.rsuser
